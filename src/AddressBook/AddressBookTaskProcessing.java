@@ -1,19 +1,17 @@
 package AddressBook;
 import java.util.List;
 
-import static AddressBook.generatedContact.people;
-
 
 /**
  * Created by student on 23-Aug-16.
  */
-public class TaskProcessing {
+public class AddressBookTaskProcessing {
 
     static void creatContact( List <String> data) {
 
         /*
 
-        Contact temp = new Contact(
+        AddressBookContact temp = new AddressBookContact(
                 data.get(0),
                 data.get(1),
                 Short.parseShort(data.get(2)),
@@ -45,7 +43,7 @@ public class TaskProcessing {
     }
 
     static void printAll() {
-        //for (Person e : people)
+        //for (AddressBookPerson e : people)
         //    System.out.println(e);
     }
 }

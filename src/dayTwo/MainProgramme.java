@@ -6,24 +6,27 @@ import static dayTwo.generatedPeople.people;
 /**
  * Created by student on 23-Aug-16.
  */
+
+// This is our main programme, this is where we execute from
 public class MainProgramme {
-    public static void main(String[] args)   {
+    public static void main(String[] args)  throws Exception  {
         //generatedPeople.addPeople();
 
 
-        //for (Person p : people) {
+        //for (AddressBookPerson p : people) {
           //  System.out.println(p);
 
 
-        //CommandGUI.display();
+        //AddressBookCommandGUI.display();
 
-        generatedPeople.addPeople();
-        //WelcomeWindow entry = new WelcomeWindow();
+       // generatedPeople.addPeople();
+        TaskProcessing.prepareDB();
+        new WelcomeWindow();
 
 
-        // TaskProcessing.executeGUI();
-      }
-    }
+        // AddressBookTaskProcessing.executeGUI();// used with GUI
+      }// end of void main
+    }// end of main program
 
 
 

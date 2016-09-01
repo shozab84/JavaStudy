@@ -3,7 +3,7 @@ package AddressBook;
 /**
  * Created by student on 23-Aug-16.
  */
-public class Person {
+public class AddressBookPerson {
     private String firstName;
     private String lastName;
 
@@ -29,7 +29,7 @@ public class Person {
     // creating constructors (Methods)
 
 
-    public Person(String firstName, String lastName) {
+    public AddressBookPerson(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
 
@@ -38,7 +38,7 @@ public class Person {
 
     @Override // we are overriding those method
     public String toString() {
-        return String.format("Person: %s %s ", this.firstName, this.lastName);
+        return String.format("AddressBookPerson: %s %s ", this.firstName, this.lastName);
 
     }
 }

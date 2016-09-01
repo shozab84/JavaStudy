@@ -1,5 +1,4 @@
 package dayTwo;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -76,9 +75,15 @@ public abstract class Person { //This person class is inherited from object clas
 
     //constructors overloading
     // we created three constructor.
-    // constructor is a way to instantitae object
+    // constructor is a way to instantiate (somewhat like create) object
     // every time you use new keyword (while creating objects), constructor is called
-    Person() {}
+
+
+    //1st constructor for AddressBookPerson
+    Person() {
+
+    }// default constructor for AddressBookPerson. We have to write  this
+
 
     public Person(String firstName, String lastName, LocalDate birthDate) {
         this.firstName = firstName;
@@ -86,12 +91,12 @@ public abstract class Person { //This person class is inherited from object clas
         this.birthDate = birthDate;
     }
 
-    public Person(String firstName, String lastName, Short height, double weight,
-                  LocalDate birthDate, SexType sex) {
+
+    public Person(String firstName, String lastName, double weight,Short height, LocalDate birthDate, SexType sex) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.height = height;
         this.weight = weight;
+        this.height = height;
         this.birthDate = birthDate;
         this.sex = sex;
         //this.bloodType = bloodType;
@@ -100,28 +105,28 @@ public abstract class Person { //This person class is inherited from object clas
 
     //methods  are more than constructor, called when needed
 
-    public long getAge() {
+    public long getAge() { // created method to get Age
         if(birthDate == null) {
             return 0;
         }
 
         long years = ChronoUnit.YEARS.between(birthDate, LocalDate.now());// ChronoUNit is a class , between is a method and
-        // it calculate and returns age.
-        // class soesn't know how this method work it just call it.
+        // it calculate and returns age and saves it in "years" variable
+        // class doesn't know how this method work it just call it.
         return years;
     }
 
 
     public String talk() throws Exception{
 
-        if(isSleeping)
+        if(isSleeping)// we have defined isSleeping at the top as boolean - false
         throw new Exception("Cannot talk while sleeping");
 
         return String.format("% % say hello! I am awake", this.firstName, this.lastName);
 
         }
 
-     public void sleep(){
+     public void sleep(){// void does return anything
          isSleeping = true;
 
      }
@@ -132,7 +137,7 @@ public abstract class Person { //This person class is inherited from object clas
    @Override// this is called annotation
    // here we see polymorphism
     public String toString(){
-       return String.format(" Person: %s %s %s %s %s %s ", this.firstName, this.lastName,this.getAge(),this.height,
-               this.weight,this.getSex().toString());
+       return String.format("%s %s %s %s %s %s ", this.firstName, this.lastName,this.weight,this.height, this.getAge(),
+               this.getSex().toString());
     }
 }

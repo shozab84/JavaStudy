@@ -1,7 +1,7 @@
 package dayTwo;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-
 import static dayTwo.generatedPeople.people;
 
 
@@ -9,21 +9,32 @@ import static dayTwo.generatedPeople.people;
  * Created by student on 23-Aug-16.
  */
 public class TaskProcessing {
-     WelcomeWindow gui;
 
-     void executeGUI() {
+    static employeeDB db;
 
-         gui = new WelcomeWindow();
+
+    static void prepareDB() throws Exception{
+
+        db = new employeeDB(); // this is where we connect to our data base
+        db.queryAll();
+    }
+
+    static void loadData() throws SQLException {
+        people.clear();
+        db.queryAll();
 
     }
 
-    static void executeGUI() {
 
-        WelcomeWindow gui = new WelcomeWindow();
+    static void newEmployee(List<String> data) throws SQLException{// this method executes on graphic
+        db.addEmployee(data);
+        loadData();
+
     }
 
 
-        static void createemployee() {
+
+        static void createEmployee(List<String> data) {// create Employee method
 
         SexType sex;
 
@@ -33,23 +44,32 @@ public class TaskProcessing {
           sex =SexType.FEMALE;
 
 
-
+            String[] dob = data.get(4).split("-"); // added new arrays for storing dob and hireDate stuff,
+            // then split into YYYY, MM and DD
+            // then store it into temp Employee
+            String[] hireDate = data.get(7).split("-");
+;
         Employee temp = new Employee(
                         data.get(0),// 0 is the index number - this represent first name
                         data.get(1),// this represent last name
                         Short.parseShort(data.get(2)),
                         Double.parseDouble(data.get(3)),
-                        LocalDate.of(Integer.parseInt(data.get(4)),
-                        Integer.parseInt(data.get(5)),
-                        Integer.parseInt(data.get(6))),
+                        LocalDate.of((Integer.parseInt(dob[0])),Integer.parseInt(dob[1]),
+                                Integer.parseInt((dob[2]))),
+                        checkSex(data.get(5)),
+                        data.get(6),
+                        LocalDate.of(Integer.parseInt(hireDate[0]), Integer.parseInt(hireDate[1]),Integer.parseInt(hireDate[2])));
 
-                        checkSex(data.get(7)),
-                        data.get(8),
 
 
-                        LocalDate.of(Integer.parseInt(data.get(9)),
-                        Integer.parseInt(data.get(10)),
-                        Integer.parseInt(data.get(11))));
+
+
+                        //data.get(8),
+
+
+                        //LocalDate.of(Integer.parseInt(data.get(9)),
+                        //Integer.parseInt(data.get(10)),
+                       // Integer.parseInt(data.get(11))));
 
 
                 people.add(temp);

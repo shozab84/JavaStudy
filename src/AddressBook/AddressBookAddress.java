@@ -3,7 +3,7 @@ package AddressBook;
 /**
  * Created by student on 23-Aug-16.
  */
-public class Address {
+public class AddressBookAddress {
     private String street;
     private String Postcode;
     private String city;
@@ -34,19 +34,18 @@ public class Address {
         this.city = city;
     }
 
-    //creating constructors (Methods)
+    //creating constructors (Methods for AddressBookAddress)
 
-
-    public Address(String street, String postcode, String city) {
+    public AddressBookAddress(String street, String postcode, String city) {
         this.street = street;
         this.Postcode = postcode;
         this.city = city;
     }
 
 
-    @Override // we are overriding thos method
+    @Override // we are overriding this method
     public String toString() {
-        return String.format("Contact: %s %s %s ", this.street, this.Postcode, this.city);
+        return String.format("AddressBookContact: %s %s %s ", this.street, this.Postcode, this.city);
 
 
     }

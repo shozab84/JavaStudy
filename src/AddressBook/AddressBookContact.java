@@ -3,13 +3,13 @@ package AddressBook;
 /**
  * Created by student on 23-Aug-16.
  */
-public class Contact {
+public class AddressBookContact {
 
     private String emailAddress;
     private String phoneNumber;
 
-    private Person p;
-    private Address a;
+    private AddressBookPerson p;
+    private AddressBookAddress a;
 
     public String getEmailAddress() {
         return emailAddress;
@@ -28,7 +28,7 @@ public class Contact {
     }
 
     // creating constructors
-    public Contact(String emailAddress, String phoneNumber, Person p, Address a) {
+    public AddressBookContact(String emailAddress, String phoneNumber, AddressBookPerson p, AddressBookAddress a) {
         this.emailAddress = emailAddress;
         this.phoneNumber = phoneNumber;
         this.p = p;
@@ -38,7 +38,7 @@ public class Contact {
 
     @Override
     public String toString() {
-        return String.format("Contact: %s %s %s %s ", this.p, this.a, this.emailAddress, this.phoneNumber);
+        return String.format("AddressBookContact: %s %s %s %s ", this.p, this.a, this.emailAddress, this.phoneNumber);
 
     }
 

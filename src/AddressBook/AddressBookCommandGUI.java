@@ -7,7 +7,7 @@ import java.util.Scanner;
 /**
  * Created by student on 23-Aug-16.
  */
-public class CommandGUI {
+public class AddressBookCommandGUI {
 
     static Scanner input = new Scanner(System.in);
 
@@ -30,7 +30,7 @@ public class CommandGUI {
 
             case 1:
                 tempData = inputScreen();
-               // TaskProcessing.createemployee(tempData);
+               // AddressBookTaskProcessing.createemployee(tempData);
 
             case 2:
 
@@ -38,9 +38,9 @@ public class CommandGUI {
                 tempData = inputScreen();
 
             case 3:
-               // TaskProcessing.removeEmployee
+               // AddressBookTaskProcessing.removeEmployee
             case 4:
-                TaskProcessing.printAll();
+                AddressBookTaskProcessing.printAll();
                 display();
             case 5:
             case 6:
@@ -53,7 +53,7 @@ public class CommandGUI {
 
 
         input.nextLine();
-        System.out.print("Enter your email Address: ");
+        System.out.print("Enter your email AddressBookAddress: ");
         employeeData.add(input.nextLine());
 
         System.out.print("Enter your phone number: ");

@@ -37,7 +37,7 @@ public class CommandGUI {
 
             case 1:
                 tempData = inputScreen();//inputScreen is method
-                TaskProcessing.createemployee(tempData);
+                TaskProcessing.createEmployee(tempData);
                 display();// recursive; we give the user same display again
 
 

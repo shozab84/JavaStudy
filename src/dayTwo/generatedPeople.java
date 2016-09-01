@@ -9,10 +9,10 @@ import java.util.ArrayList;
  */
 public class generatedPeople {
     /*
-    public static Person dana = new Person ("Dana", "Scully", (short)160, 52.5, LocalDate.of(1968, 9, 9), SexType.FEMALE
+    public static AddressBookPerson dana = new AddressBookPerson ("Dana", "Scully", (short)160, 52.5, LocalDate.of(1968, 9, 9), SexType.FEMALE
             );
 
-    public static Person alex = new Person("Alex", "Kennedy", (short)180, 78.90, LocalDate.of(1983, 4, 16), SexType.MALE
+    public static AddressBookPerson alex = new AddressBookPerson("Alex", "Kennedy", (short)180, 78.90, LocalDate.of(1983, 4, 16), SexType.MALE
             );
 
 
@@ -21,8 +21,11 @@ public class generatedPeople {
     */
 
     public  static Employee fox = new Employee("Fox","Muller",(short)185, 78.90,LocalDate.of(1983, 4, 16), SexType.MALE, "FBI Agent",LocalDate.of(1983, 4, 16) );
-    public static List<Employee> people = new ArrayList<>(); // what does this line do???
 
+
+
+
+    public static List<Employee> people = new ArrayList<>(); // people is the name of the new list
 
     static void addPeople() {
 

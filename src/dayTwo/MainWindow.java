@@ -4,9 +4,15 @@ import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import static dayTwo.generatedPeople.people;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by student on 24-Aug-16.
@@ -21,6 +27,7 @@ public class MainWindow implements ActionListener {
     private JLabel lblSex;
     private JLabel lblPosition;
     private JLabel lblHireDate;
+
     private JTextField txtFirstName;
     private JTextField txtLastName;
     private JTextField txtWeight;
@@ -30,12 +37,11 @@ public class MainWindow implements ActionListener {
     private JTextField txtPosition;
     private JTextField txtHireDate;
 
-
     private JButton btnUpdate;
     private JButton btnRemove;
 
 
-    // menu items
+    // creating menu items
 
     private JMenuBar menuBar;
     private JMenu fileMenu;
@@ -45,17 +51,24 @@ public class MainWindow implements ActionListener {
     private JPanel content;
     private JPanel listPanel;// left hand side inner pannel
     private JPanel fieldPanel; // right hand side inner panel
-
-    private JList employeeList;
-
     private JPanel inputPanel;
     private JPanel btnPanel;
 
+    private JList employeeList;
+
+    private JList createEmployeeList;
+
+    private int employeeIndex;
+    private boolean createNew;
+    private int EmployeeIndex = -1;
+
+
+
     // calling constructor
+
     public MainWindow() {
 
         JFrame mainFrame = new JFrame("Employee Database");
-
         // setting window size
 
         mainFrame.setSize(800, 400);
@@ -63,7 +76,6 @@ public class MainWindow implements ActionListener {
         mainFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);// interface is used here
 
         // creating new windows adapter
-
         WindowListener l = new WindowAdapter() {
 
             public void windowClosing(WindowEvent e) {
@@ -96,6 +108,8 @@ public class MainWindow implements ActionListener {
         // setting grid layout
         content.setLayout(new GridLayout(1, 2, 5, 5));// 1 row, 2 columns
 
+        prepareJList();
+
 
         listPanel = new JPanel();// constructor
         listPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
@@ -107,7 +121,11 @@ public class MainWindow implements ActionListener {
 
         scrollPane.setPreferredSize(new Dimension(380, 335));
         listPanel.add(scrollPane);
+        listPanel.setVisible(false);
         content.add(listPanel);
+
+
+
 
 
         fieldPanel = new JPanel();
@@ -124,11 +142,11 @@ public class MainWindow implements ActionListener {
         mainFrame.setVisible(true);// setting mainFrame to visible to the user
 
 
-    }
+    }//end of MainWindow
 
 
     //creating Menu(file edit etc) method
-    private JMenuBar createMenu() {
+        private JMenuBar createMenu() {
 
         menuBar = new JMenuBar();
 
@@ -138,7 +156,7 @@ public class MainWindow implements ActionListener {
         fileMenu.setMnemonic(KeyEvent.VK_F);// keyboard shortcut to open File menu
         newMenuItem = new JMenuItem("New");
         newMenuItem.setMnemonic(KeyEvent.VK_N);
-        newMenuItem.addActionListener(this);
+        newMenuItem.addActionListener(this);// this will invoke controller object
         fileMenu.add(newMenuItem);
 
 
@@ -164,14 +182,44 @@ public class MainWindow implements ActionListener {
     }
 
 
-    private JList createEmployeeList() {
+    private void prepareJList(){
+
+
         employeeList = new JList(people.toArray());
         employeeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        employeeList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                fieldPanel.setVisible(true);
+                employeeIndex = employeeList.getSelectedIndex();
+                if (people.size()>0 && employeeIndex != -1)
+                    loadEmployeeFields(employeeIndex);
+                else
+                    clearTxtfields();
 
-        return employeeList;
+            }
+        });
+
     }
 
-    private JPanel createFieldPanel() {
+    private JList createEmployeeList() {
+        DefaultListModel listModel = new DefaultListModel();
+        if (people.size() > 0) {
+            for (Employee e : people)
+                listModel.addElement(e);
+
+        }
+        employeeList.setModel(listModel);
+
+        return employeeList;
+
+
+    }// end of JList createEmployeeList
+
+
+
+        private JPanel createFieldPanel(){
+
 
         inputPanel = new JPanel();
         inputPanel.setLayout(new GridLayout(0, 2, 5, 5));
@@ -201,7 +249,7 @@ public class MainWindow implements ActionListener {
 
         // Date of birth (YYYY/MM/DD
 
-        lblBirthDate = new JLabel("Date of Birth (YYYY/MM/DD:");
+        lblBirthDate = new JLabel("Date of Birth (YYYY-MM-DD:");
         inputPanel.add(lblBirthDate);
         txtBirthDate = new JFormattedTextField();
         inputPanel.add(txtBirthDate);
@@ -225,7 +273,7 @@ public class MainWindow implements ActionListener {
         //hired date
 
 
-        lblHireDate = new JLabel("Hired Date (YYYY/MM/DD:");
+        lblHireDate = new JLabel("Hired Date (YYYY-MM-DD:");
         inputPanel.add(lblHireDate);
         txtHireDate = new JFormattedTextField();
         inputPanel.add(txtHireDate);
@@ -242,22 +290,53 @@ public class MainWindow implements ActionListener {
 
         btnUpdate = new JButton("Update Boom");
         btnUpdate.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+             @Override
+              public void actionPerformed(ActionEvent e) {// when user click update new methods are created
 
-            }
-        });
+                if(createNew & employeeList.isSelectionEmpty()){
+
+                    try {
+
+                        TaskProcessing.createEmployee(getFieldsInfo());
+                        createEmployeeList();
+                        createNew = false;
+                        clearTxtfields();
+                    }
+
+                    catch (SQLException createEx){
+                        JOptionPane.showMessageDialog((null), "Error Adding Employee" +
+                        System.lineSeparator() + createEx);
+
+
+                    }
+
+
+                }
+
+                else {
+
+                    TaskProcessing.editDetails(employeeIndex,getFieldsInfo());
+                    createEmployeeList();
+                }
+                 createNew = false;
+                 employeeIndex =-1;
+
+        }});
         btnPanel.add(btnUpdate); //calling button update
 
 
-        btnRemove = new JButton("Remove not Boom");
+        btnRemove = new JButton("Remove");
         btnRemove.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                    TaskProcessing.removeEmployee(employeeIndex);
+                    clearTxtfields();
+                    createEmployeeList();
+                    employeeIndex =-1;
+                }
 
             }
-
-        });
+        );
         btnPanel.add(btnRemove);// calling button remove
 
         return btnPanel;
@@ -268,48 +347,85 @@ public class MainWindow implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         String action = e.getActionCommand();
-        if ("New".equals(action))
+        if ("New".equals(action)) {
+            clearTxtfields();
+
+            if (employeeIndex <0)
+                createNew = true;
+
+            listPanel.setVisible(true);
             fieldPanel.setVisible(true);
+        }
         else if ("Exit".equals(action)){
             System.exit(0);
         }
+        else if ("Search".equals(action)){
+            String fnSearch = JOptionPane.showInputDialog("Enter first Name");
+            employeeIndex = TaskProcessing.searchByFirstName(fnSearch);
+            if (employeeIndex != -1)
+                loadEmployeeFields(employeeIndex);
+            else
+                JOptionPane.showMessageDialog(null, "Cannot find it");// tell user if search is not found.
+        }
+    }
+
+
+    private void clearTxtfields(){
+        txtFirstName.setText("");// makes firstname field blank.
+        txtLastName.setText("");// makes firstname field blank.
+        txtHeight.setText("");// makes firstname field blank.
+        txtWeight.setText("");// makes firstname field blank.
+        txtBirthDate.setText("");// makes firstname field blank.
+        txtSex.setText("");// makes firstname field blank.
+        txtPosition.setText("");// makes firstname field blank.
+        txtHireDate.setText("");// makes firstname field blank.
+
+    }// end of clearTxtfields method
+
+
+    private void loadEmployeeFields(int index){
+
+
+        txtFirstName.setText(people.get(index).getFirstName());// when user selects a record, his details populate in different txt boxes
+        txtLastName.setText(people.get(index).getLastName());
+        txtWeight.setText(Double.toString(people.get(index).getWeight()));
+        txtHeight.setText(Short.toString(people.get(index).getHeight()));
+        txtBirthDate.setText(people.get(index).getBirthDate().toString());
+        txtSex.setText(people.get(index).getSex().toString());
+        txtPosition.setText(people.get(index).getPosition());
+        txtHireDate.setText(people.get(index).getHireDate().toString());
+
+    }// end of loadEmployeeFields method
+
+
+
+    private java.util.List<String> getFieldsInfo(){
+        List<String> data = new ArrayList<>();
+
+        data.add((txtFirstName.getText()));
+        data.add((txtLastName.getText()));
+        data.add((txtHeight.getText()));
+        data.add((txtWeight.getText()));
+        data.add((txtBirthDate.getText()));
+        data.add((txtSex.getText()));
+        data.add((txtPosition.getText()));
+        data.add((txtHireDate.getText()));
+
+        return data;
+
+        // creating an array- stringDob
+        //String[] stringDob = txtBirthDate.getText().split("-");
+       // data.add(stringDob [0]);
+       // data.add(stringDob [1]);
+        //data.add(stringDob [2]);
+       // data.add(txtSex.getText());
+        //data.add(txtPosition.getText());
+
+        //String[] stringHireDate = txtHireDate.getText().split("-");
+        //data.add(stringHireDate[0]);
+        //data.add(stringHireDate[1]);
+       // data.add(stringHireDate[2]);
 
     }
 
-// getter and setter
-
-
-    public JTextField getTxtFirstName() {
-        return txtFirstName;
-    }
-
-    public JTextField getTxtLastName() {
-        return txtLastName;
-    }
-
-    public JTextField getTxtWeight() {
-        return txtWeight;
-    }
-
-    public JTextField getTxtHeight() {
-        return txtHeight;
-    }
-
-    public JTextField getTxtBirthDate() {
-        return txtBirthDate;
-    }
-
-    public JTextField getTxtSex() {
-        return txtSex;
-    }
-
-    public JTextField getTxtPosition() {
-        return txtPosition;
-    }
-
-    public JTextField getTxtHireDate() {
-        return txtHireDate;
-    }
-
-    public
 }

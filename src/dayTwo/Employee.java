@@ -6,7 +6,7 @@ import java.time.LocalDate;
  * Created by student on 23-Aug-16.
  */
 
-// Employee is a Person (Person is a superclass of employee)
+// Employee is a AddressBookPerson (AddressBookPerson is a superclass of employee)
 public class Employee extends Person {// extends now inherit- first name, last name, date
 
     private String position;
@@ -18,10 +18,16 @@ public class Employee extends Person {// extends now inherit- first name, last n
                     SexType sex, String position, LocalDate hireDate) {
 
 
-        super(firstName, lastName, height, weight, birthDate, sex);
+        super(firstName, lastName, weight,height, birthDate, sex);
         this.position = position;
         this.hireDate = hireDate;
     }
+
+
+
+
+
+
 
     // using setter
 
@@ -44,7 +50,7 @@ public class Employee extends Person {// extends now inherit- first name, last n
 
     @Override
     public String toString() {
-        return String.format("Employee Name: %s %s %s", super.toString(),this.position,this.hireDate);
+        return String.format("%s %s %s", super.toString(),this.position,this.hireDate);
     }
 
 
